@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WealthWise — Finanzas que transforman tu vida</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #8B6914;
+    --ink: #0D0D0D;
+    --ink-soft: #1A1A1A;
+    --cream: #FAF7F2;
+    --cream-dark: #F0EBE1;
+    --sage: #4A6741;
+    --sage-light: #6B9462;
+    --red-accent: #C0392B;
+    --text-main: #2C2C2C;
+    --text-muted: #6B6B6B;
+    --text-light: #9A9A9A;
+    --border: rgba(201,168,76,0.2);
+    --shadow-gold: 0 0 40px rgba(201,168,76,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-main);
+    overflow-x: hidden;
+  }
+
+  /* ===== CURSOR ===== */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: multiply;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.12s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.6;
+  }
+  .cursor.hovering { width: 18px; height: 18px; }
+  .cursor-ring.hovering { width: 56px; height: 56px; opacity: 0.3; }
+
+  /* ===== HEADER ===== */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5vw;
+  }
+  .header-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-dot { color: var(--gold); }
+  nav { display: flex; gap: 2rem; }
+  nav a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  nav a:hover { color: var(--gold-dark); }
+  .header-cta {
+    background: var(--ink);
+    color: var(--cream) !important;
+    padding: 8px 20px;
+    border-radius: 2px;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.1em !important;
+    transition: background 0.2s !important;
+  }
+  .header-cta:hover { background: var(--gold-dark) !important; color: var(--cream) !important; }
+
+  /* ===== TICKER ===== */
+  .ticker-wrap {
+    background: var(--ink);
+    padding: 8px 0;
+    overflow: hidden;
+    border-bottom: 2px solid var(--gold);
+  }
+  .ticker {
+    display: flex; gap: 4rem;
+    animation: tickerScroll 28s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker:hover { animation-play-state: paused; }
+  @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: #AAA;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ticker-item .up { color: #4CAF50; }
+  .ticker-item .down { color: #F44336; }
+  .ticker-item strong { color: #FFF; font-size: 0.75rem; }
+
+  /* ===== HERO ===== */
+  .hero {
+    max-width: 1400px; margin: 0 auto;
+    padding: 80px 5vw 60px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold-dark);
+    border: 1px solid var(--gold);
+    padding: 5px 14px; border-radius: 2px;
+    margin-bottom: 24px;
+    background: rgba(201,168,76,0.07);
+  }
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 4.5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.08;
+    color: var(--ink);
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-dark);
+  }
+  .hero-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 36px;
+  }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 14px 28px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border: none; border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateX(-101%);
+    transition: transform 0.3s ease;
+    z-index: 0;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    padding: 14px 28px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--cream); }
+
+  /* Hero Stats */
+  .hero-stats {
+    display: flex; gap: 32px;
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900;
+    color: var(--ink);
+    display: block;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--text-light); letter-spacing: 0.05em; }
+
+  /* Hero Featured Card */
+  .hero-featured {
+    position: sticky; top: 90px;
+  }
+  .featured-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #FFF;
+    box-shadow: var(--shadow-gold);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(201,168,76,0.2);
+  }
+  .featured-img {
+    height: 240px;
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 40%, #0F3460 100%);
+    position: relative; overflow: hidden;
+    display: flex; align-items: flex-end; padding: 24px;
+  }
+  .featured-img::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A84C' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .chart-mini {
+    width: 100%; display: flex; align-items: flex-end;
+    gap: 4px; height: 80px; position: relative; z-index: 1;
+  }
+  .chart-bar {
+    flex: 1; background: rgba(201,168,76,0.3);
+    border-radius: 2px 2px 0 0;
+    transition: background 0.3s;
+    position: relative;
+  }
+  .chart-bar:hover { background: rgba(201,168,76,0.7); }
+  .chart-bar.active { background: var(--gold); }
+  .featured-body { padding: 24px; }
+  .featured-cat {
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold-dark); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .featured-cat::before { content: '●'; font-size: 0.5rem; }
+  .featured-body h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    line-height: 1.3; color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .featured-body p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+  .featured-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.75rem; color: var(--text-light);
+  }
+  .read-time { display: flex; align-items: center; gap: 4px; }
+  .progress-bar-wrap { background: var(--cream-dark); height: 2px; margin-top: 12px; border-radius: 1px; }
+  .progress-bar { height: 100%; background: var(--gold); width: 0%; transition: width 1s ease; border-radius: 1px; }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-divider {
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 5vw;
+    display: flex; align-items: center; gap: 20px;
+    margin-bottom: 40px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-style: italic;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ===== ARTICLES GRID ===== */
+  .articles-section {
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 5vw 80px;
+  }
+  .articles-filter {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .filter-btn {
+    padding: 7px 18px;
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.06em;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold-dark); }
+  .filter-btn.active {
+    background: var(--ink); color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .article-card {
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+    animation: fadeInUp 0.5s ease both;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .article-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.1), 0 0 0 1px rgba(201,168,76,0.3);
+  }
+  .article-card.large { grid-column: span 2; }
+  .article-thumb {
+    height: 200px;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .article-card.large .article-thumb { height: 260px; }
+  .thumb-icon { font-size: 3.5rem; position: relative; z-index: 1; }
+  .article-thumb::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.4) 100%);
+  }
+  .article-body { padding: 22px; }
+  .article-cat {
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .article-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; font-weight: 700;
+    line-height: 1.35; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .article-card.large .article-body h3 { font-size: 1.5rem; }
+  .article-body p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+  .article-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px;
+    border-top: 1px solid var(--cream-dark);
+    font-size: 0.75rem; color: var(--text-light);
+  }
+  .author-mini { display: flex; align-items: center; gap: 8px; }
+  .author-avatar {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 700; color: #FFF;
+  }
+  .likes-btn {
+    display: flex; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+    font-size: 0.75rem; color: var(--text-light);
+    transition: color 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px 8px; border-radius: 4px;
+  }
+  .likes-btn:hover { color: var(--red-accent); background: rgba(192,57,43,0.07); }
+  .likes-btn.liked { color: var(--red-accent); }
+
+  /* ===== CALCULATOR WIDGET ===== */
+  .calculator-section {
+    background: var(--ink);
+    padding: 80px 5vw;
+    position: relative; overflow: hidden;
+  }
+  .calculator-section::before {
+    content: 'WEALTH';
+    position: absolute; top: -20px; right: -20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 12rem; font-weight: 900; font-style: italic;
+    color: rgba(201,168,76,0.04);
+    pointer-events: none; user-select: none;
+    line-height: 1;
+  }
+  .calc-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 80px; align-items: center;
+  }
+  .calc-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 900; color: var(--cream);
+    line-height: 1.15; margin-bottom: 20px;
+  }
+  .calc-info h2 em { color: var(--gold); font-style: italic; }
+  .calc-info p { color: #888; font-size: 0.95rem; line-height: 1.7; margin-bottom: 30px; }
+  .calc-features { list-style: none; }
+  .calc-features li {
+    color: #AAA; font-size: 0.85rem;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .calc-features li::before {
+    content: '→';
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+  }
+  .calculator-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 6px;
+    padding: 36px;
+  }
+  .calc-title {
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 28px;
+  }
+  .calc-field { margin-bottom: 20px; }
+  .calc-field label {
+    display: block;
+    font-size: 0.78rem; font-weight: 500;
+    color: #AAA; margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+  .calc-field input, .calc-field select {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #FFF;
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    font-family: 'DM Mono', monospace;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .calc-field input:focus { border-color: var(--gold); }
+  .calc-field select option { background: #1A1A1A; }
+  .range-wrap { position: relative; }
+  .range-val {
+    position: absolute; right: 0; top: -24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem; color: var(--gold);
+  }
+  input[type="range"] {
+    -webkit-appearance: none; width: 100%; height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px; outline: none; padding: 0; border: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    background: var(--gold); border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(201,168,76,0.2);
+    transition: box-shadow 0.2s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 8px rgba(201,168,76,0.15);
+  }
+  .calc-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--ink);
+    border: none; padding: 15px;
+    font-size: 0.88rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-radius: 3px; cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .calc-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .calc-result {
+    margin-top: 24px;
+    padding: 20px;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 3px;
+    display: none;
+  }
+  .calc-result.show { display: block; animation: fadeInUp 0.4s ease; }
+  .result-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900;
+    color: var(--gold);
+    display: block; margin-bottom: 6px;
+  }
+  .result-sub { font-size: 0.78rem; color: #888; }
+
+  /* ===== NEWSLETTER ===== */
+  .newsletter-section {
+    max-width: 1400px; margin: 0 auto;
+    padding: 60px 5vw;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  .newsletter-copy h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+    font-weight: 900; line-height: 1.2;
+    color: var(--ink); margin-bottom: 14px;
+  }
+  .newsletter-copy h2 em { color: var(--gold-dark); font-style: italic; }
+  .newsletter-copy p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+  .newsletter-form {
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: 6px; padding: 32px;
+    box-shadow: var(--shadow-gold);
+  }
+  .newsletter-form .form-title {
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold-dark); margin-bottom: 20px;
+  }
+  .form-row { margin-bottom: 14px; }
+  .form-row input {
+    width: 100%;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+    padding: 12px 16px;
+    font-size: 0.88rem;
+    border-radius: 3px;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s;
+  }
+  .form-row input:focus { border-color: var(--gold); }
+  .form-submit {
+    width: 100%;
+    background: var(--ink); color: var(--cream);
+    border: none; padding: 14px;
+    font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-radius: 3px; cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 6px;
+    position: relative; overflow: hidden;
+  }
+  .form-submit::before {
+    content: '✓ ¡Suscrito!';
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--sage); color: #FFF;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+  }
+  .form-submit.submitted::before { transform: translateY(0); }
+  .form-submit:hover { background: var(--gold-dark); }
+  .form-note { font-size: 0.72rem; color: var(--text-light); margin-top: 12px; text-align: center; }
+
+  /* ===== TRENDING TOPICS ===== */
+  .trending-section {
+    background: var(--cream-dark);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 50px 5vw;
+  }
+  .trending-inner { max-width: 1400px; margin: 0 auto; }
+  .trending-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 32px;
+  }
+  .trending-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--ink);
+  }
+  .trending-badge {
+    background: var(--red-accent);
+    color: #FFF; font-size: 0.62rem;
+    font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 10px;
+    border-radius: 2px;
+  }
+  .trending-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .trending-item {
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .trending-item:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .trending-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 2.5rem; font-weight: 500;
+    color: var(--cream-dark);
+    line-height: 1; margin-bottom: 12px;
+  }
+  .trending-item h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem; font-weight: 700;
+    color: var(--ink); margin-bottom: 6px; line-height: 1.3;
+  }
+  .trending-item p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+  .trending-arrow {
+    position: absolute; top: 20px; right: 20px;
+    font-size: 1rem; color: var(--text-light);
+    transition: transform 0.2s, color 0.2s;
+  }
+  .trending-item:hover .trending-arrow { transform: translate(2px, -2px); color: var(--gold-dark); }
+
+  /* ===== READING PROGRESS ===== */
+  .reading-progress {
+    position: fixed; top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+  /* ===== ARTICLE MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--cream);
+    border-radius: 6px;
+    max-width: 720px; width: 100%;
+    max-height: 85vh; overflow-y: auto;
+    transform: scale(0.96) translateY(10px);
+    transition: transform 0.3s;
+    position: relative;
+  }
+  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+  .modal-header {
+    padding: 36px 40px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-cat {
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold-dark); margin-bottom: 12px;
+  }
+  .modal-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 900;
+    line-height: 1.2; color: var(--ink);
+  }
+  .modal-body { padding: 32px 40px 40px; }
+  .modal-body p {
+    font-size: 0.95rem; line-height: 1.8;
+    color: var(--text-main); margin-bottom: 20px;
+  }
+  .modal-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--ink); margin: 28px 0 12px;
+  }
+  .modal-highlight {
+    background: rgba(201,168,76,0.1);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px; border-radius: 0 4px 4px 0;
+    font-size: 0.9rem; color: var(--text-main);
+    line-height: 1.7; margin: 20px 0;
+    font-style: italic;
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    background: var(--cream-dark); border: none;
+    border-radius: 50%; cursor: pointer;
+    font-size: 1.1rem; color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: var(--ink); color: #FFF; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--ink);
+    padding: 60px 5vw 30px;
+    border-top: 3px solid var(--gold);
+  }
+  .footer-inner {
+    max-width: 1400px; margin: 0 auto;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 48px; padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    margin-bottom: 32px;
+  }
+  .footer-brand p { font-size: 0.82rem; color: #666; line-height: 1.7; margin-top: 12px; margin-bottom: 20px; }
+  .footer-social { display: flex; gap: 10px; }
+  .social-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; color: #888; cursor: pointer;
+    transition: all 0.2s; text-decoration: none;
+  }
+  .social-btn:hover { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+  .footer-col h4 {
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 18px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-col a {
+    font-size: 0.82rem; color: #666;
+    text-decoration: none;
+    transition: color 0.2s; cursor: pointer;
+  }
+  .footer-col a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.75rem; color: #444;
+  }
+  .footer-bottom a { color: #555; text-decoration: none; }
+  .footer-bottom a:hover { color: var(--gold); }
+
+  /* ===== AD PLACEHOLDER ===== */
+  .ad-banner {
+    background: var(--cream-dark);
+    border: 1px dashed rgba(201,168,76,0.3);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; color: var(--text-light);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .ad-leaderboard { height: 90px; margin: 40px auto; max-width: 1400px; margin-left: auto; margin-right: auto; padding: 0 5vw; }
+  .ad-leaderboard .ad-banner { height: 90px; }
+  .ad-sidebar { height: 280px; }
+
+  /* ===== SCROLL TO TOP ===== */
+  .scroll-top {
+    position: fixed; bottom: 30px; right: 30px;
+    width: 46px; height: 46px;
+    background: var(--ink);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1.1rem;
+    opacity: 0; pointer-events: none;
+    transition: all 0.3s;
+    z-index: 500;
+  }
+  .scroll-top.visible { opacity: 1; pointer-events: all; }
+  .scroll-top:hover { background: var(--gold); color: var(--ink); transform: translateY(-2px); }
+
+  /* ===== ANIMATIONS ===== */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-featured { display: none; }
+    .articles-grid { grid-template-columns: 1fr 1fr; }
+    .article-card.large { grid-column: span 2; }
+    .calc-inner { grid-template-columns: 1fr; }
+    .newsletter-section { grid-template-columns: 1fr; }
+    .trending-grid { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .articles-grid { grid-template-columns: 1fr; }
+    .article-card.large { grid-column: 1; }
+    .trending-grid { grid-template-columns: 1fr; }
+    nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Article Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-cat" id="modalCat"></div>
+      <h2 id="modalTitle"></h2>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    <span class="ticker-item"><strong>S&P 500</strong> 5,234.18 <span class="up">▲ +0.87%</span></span>
+    <span class="ticker-item"><strong>BTC/USD</strong> 67,420 <span class="up">▲ +2.14%</span></span>
+    <span class="ticker-item"><strong>EUR/USD</strong> 1.0842 <span class="down">▼ -0.12%</span></span>
+    <span class="ticker-item"><strong>GOLD</strong> 2,312/oz <span class="up">▲ +0.45%</span></span>
+    <span class="ticker-item"><strong>IBEX 35</strong> 10,892 <span class="up">▲ +0.33%</span></span>
+    <span class="ticker-item"><strong>ETH/USD</strong> 3,180 <span class="down">▼ -0.78%</span></span>
+    <span class="ticker-item"><strong>OIL WTI</strong> 78.54 <span class="down">▼ -0.22%</span></span>
+    <span class="ticker-item"><strong>NASDAQ</strong> 18,340 <span class="up">▲ +1.02%</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><strong>S&P 500</strong> 5,234.18 <span class="up">▲ +0.87%</span></span>
+    <span class="ticker-item"><strong>BTC/USD</strong> 67,420 <span class="up">▲ +2.14%</span></span>
+    <span class="ticker-item"><strong>EUR/USD</strong> 1.0842 <span class="down">▼ -0.12%</span></span>
+    <span class="ticker-item"><strong>GOLD</strong> 2,312/oz <span class="up">▲ +0.45%</span></span>
+    <span class="ticker-item"><strong>IBEX 35</strong> 10,892 <span class="up">▲ +0.33%</span></span>
+    <span class="ticker-item"><strong>ETH/USD</strong> 3,180 <span class="down">▼ -0.78%</span></span>
+    <span class="ticker-item"><strong>OIL WTI</strong> 78.54 <span class="down">▼ -0.22%</span></span>
+    <span class="ticker-item"><strong>NASDAQ</strong> 18,340 <span class="up">▲ +1.02%</span></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">Wealth<span class="logo-dot">●</span>Wise</div>
+    <nav>
+      <a onclick="filterArticles('Inversión')">Inversión</a>
+      <a onclick="filterArticles('Ahorro')">Ahorro</a>
+      <a onclick="filterArticles('Crypto')">Crypto</a>
+      <a onclick="filterArticles('Inmobiliario')">Inmobiliario</a>
+      <a onclick="filterArticles('Impuestos')">Impuestos</a>
+      <a class="header-cta" onclick="document.querySelector('.newsletter-section').scrollIntoView({behavior:'smooth'})">Newsletter</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Edición Semanal — Finanzas Personales</div>
+    <h1>El dinero trabaja para ti cuando <em>sabes</em> cómo hablarlo.</h1>
+    <p class="hero-desc">Estrategias reales, datos actuales y análisis profundos para que cada decisión financiera que tomes sea una decisión inteligente.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('articles').scrollIntoView({behavior:'smooth'})"><span>Explorar Artículos</span></button>
+      <button class="btn-secondary" onclick="document.querySelector('.calculator-section').scrollIntoView({behavior:'smooth'})">Calcular mi Patrimonio</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num" data-count="124000">0</span>
+        <span class="stat-label">Lectores activos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="380">0</span>
+        <span class="stat-label">Artículos publicados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">4.9★</span>
+        <span class="stat-label">Valoración media</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-featured">
+    <div class="featured-card" onclick="openArticle(0)">
+      <div class="featured-img">
+        <div class="chart-mini" id="heroChart"></div>
+      </div>
+      <div class="featured-body">
+        <div class="featured-cat">Artículo Destacado</div>
+        <h2>Cómo invertir 10.000€ en 2025 sin cometer los errores del pasado</h2>
+        <p>Una guía paso a paso con las estrategias que los gestores de fondos usan pero pocas veces comparten.</p>
+        <div class="featured-meta">
+          <span>Por Carlos Mendoza · 15 Jun 2025</span>
+          <span class="read-time">⏱ 8 min</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="heroProgressBar"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AD LEADERBOARD -->
+<div class="ad-leaderboard" style="padding: 0 5vw; max-width:1400px; margin: 0 auto 20px;">
+  <div class="ad-banner">Publicidad · Google AdSense — 728×90</div>
+</div>
+
+<!-- SECTION DIVIDER -->
+<div class="section-divider reveal">
+  <div class="divider-line"></div>
+  <div class="divider-label">Lo más leído esta semana</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- FILTER + ARTICLES -->
+<section class="articles-section" id="articles">
+  <div class="articles-filter" id="filterBtns">
+    <button class="filter-btn active" onclick="filterArticles('Todos')">Todos</button>
+    <button class="filter-btn" onclick="filterArticles('Inversión')">Inversión</button>
+    <button class="filter-btn" onclick="filterArticles('Ahorro')">Ahorro</button>
+    <button class="filter-btn" onclick="filterArticles('Crypto')">Crypto</button>
+    <button class="filter-btn" onclick="filterArticles('Inmobiliario')">Inmobiliario</button>
+    <button class="filter-btn" onclick="filterArticles('Impuestos')">Impuestos</button>
+    <button class="filter-btn" onclick="filterArticles('Pensiones')">Pensiones</button>
+  </div>
+  <div class="articles-grid" id="articlesGrid"></div>
+</section>
+
+<!-- CALCULATOR SECTION -->
+<section class="calculator-section">
+  <div class="calc-inner">
+    <div class="calc-info reveal">
+      <h2>Descubre cuánto valdrá tu dinero en <em>el futuro</em></h2>
+      <p>Calcula el crecimiento real de tus inversiones con nuestra herramienta de interés compuesto. Ajusta el tiempo, el rendimiento y el ahorro mensual para visualizar tu futuro financiero.</p>
+      <ul class="calc-features">
+        <li>Interés compuesto con aportaciones periódicas</li>
+        <li>Ajuste por inflación real (IPC España)</li>
+        <li>Comparativa de fondos índice vs depósito bancario</li>
+        <li>Proyección a 10, 20 y 30 años</li>
+      </ul>
+    </div>
+    <div class="calculator-box reveal">
+      <div class="calc-title">⚡ Calculadora de Riqueza</div>
+
+      <div class="calc-field">
+        <label>Capital inicial (€)</label>
+        <input type="number" id="calcCapital" value="10000" min="0" step="500" oninput="calcResult()">
+      </div>
+      <div class="calc-field">
+        <label>Aportación mensual (€)</label>
+        <input type="number" id="calcMonthly" value="300" min="0" step="50" oninput="calcResult()">
+      </div>
+      <div class="calc-field">
+        <label>Rendimiento anual esperado — <span id="rateLabel">7%</span></label>
+        <div class="range-wrap">
+          <input type="range" id="calcRate" min="1" max="20" value="7" oninput="updateRate()">
+        </div>
+      </div>
+      <div class="calc-field">
+        <label>Años de inversión</label>
+        <select id="calcYears" onchange="calcResult()">
+          <option value="5">5 años</option>
+          <option value="10" selected>10 años</option>
+          <option value="15">15 años</option>
+          <option value="20">20 años</option>
+          <option value="30">30 años</option>
+        </select>
+      </div>
+      <button class="calc-btn" onclick="calcResult()">Calcular Patrimonio →</button>
+      <div class="calc-result" id="calcResult">
+        <span class="result-main" id="resultMain">€ 0</span>
+        <div class="result-sub" id="resultSub"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRENDING -->
+<section class="trending-section">
+  <div class="trending-inner">
+    <div class="trending-header">
+      <h3>Temas que están marcando tendencia</h3>
+      <span class="trending-badge">🔥 Hot</span>
+    </div>
+    <div class="trending-grid">
+      <div class="trending-item reveal" onclick="openArticle(2)">
+        <div class="trending-num">01</div>
+        <div class="trending-arrow">↗</div>
+        <h4>La burbuja inmobiliaria que nadie quiere nombrar</h4>
+        <p>Los precios del alquiler superan el 40% del salario medio en 8 ciudades españolas.</p>
+      </div>
+      <div class="trending-item reveal" onclick="openArticle(4)">
+        <div class="trending-num">02</div>
+        <div class="trending-arrow">↗</div>
+        <h4>Bitcoin a 100.000$: realidad o fantasía</h4>
+        <p>Análisis on-chain de los wallets que acumulan en silencio mientras el retail vende.</p>
+      </div>
+      <div class="trending-item reveal" onclick="openArticle(1)">
+        <div class="trending-num">03</div>
+        <div class="trending-arrow">↗</div>
+        <h4>El método 50/30/20 que realmente funciona</h4>
+        <p>Cómo adaptar la regla de oro del presupuesto a la inflación española de 2025.</p>
+      </div>
+      <div class="trending-item reveal" onclick="openArticle(3)">
+        <div class="trending-num">04</div>
+        <div class="trending-arrow">↗</div>
+        <h4>Fondos indexados vs ETFs: ¿cuál paga menos impuestos?</h4>
+        <p>La guía fiscal que necesitas antes de tu próxima declaración de la renta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="newsletter-copy reveal">
+    <h2>Finanzas inteligentes, directo a tu <em>bandeja de entrada</em></h2>
+    <p>Cada domingo: un análisis de mercado, una estrategia de ahorro y un consejo fiscal. Sin ruido, sin spam. Solo lo que mueve el dinero de verdad.</p>
+    <br>
+    <p style="font-size:0.8rem; color:var(--text-light)">
+      📬 Más de <strong>124.000 suscriptores</strong> ya reciben nuestra newsletter cada semana
+    </p>
+  </div>
+  <div class="newsletter-form reveal">
+    <div class="form-title">📩 Únete ahora — es gratis</div>
+    <div class="form-row"><input type="text" placeholder="Tu nombre" id="newsletterName"></div>
+    <div class="form-row"><input type="email" placeholder="tu@email.com" id="newsletterEmail"></div>
+    <button class="form-submit" id="formSubmit" onclick="submitForm()">Quiero recibir la newsletter →</button>
+    <p class="form-note">Sin spam. Cancela cuando quieras. 100% gratuito.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo" style="font-size:1.4rem">Wealth<span class="logo-dot">●</span>Wise</div>
+        <p>El medio de referencia en finanzas personales en español. Análisis riguroso, sin conflicto de interés.</p>
+        <div class="footer-social">
+          <a class="social-btn" title="Twitter">𝕏</a>
+          <a class="social-btn" title="YouTube">▶</a>
+          <a class="social-btn" title="Telegram">✈</a>
+          <a class="social-btn" title="Instagram">◎</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Categorías</h4>
+        <ul>
+          <li><a onclick="filterArticles('Inversión')">Inversión</a></li>
+          <li><a onclick="filterArticles('Ahorro')">Ahorro inteligente</a></li>
+          <li><a onclick="filterArticles('Crypto')">Criptomonedas</a></li>
+          <li><a onclick="filterArticles('Inmobiliario')">Inmobiliario</a></li>
+          <li><a onclick="filterArticles('Impuestos')">Fiscalidad</a></li>
+          <li><a onclick="filterArticles('Pensiones')">Pensiones</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Herramientas</h4>
+        <ul>
+          <li><a onclick="document.querySelector('.calculator-section').scrollIntoView({behavior:'smooth'})">Calculadora riqueza</a></li>
+          <li><a>Comparador fondos</a></li>
+          <li><a>Simulador hipoteca</a></li>
+          <li><a>Planificador FIRE</a></li>
+          <li><a>Test perfil inversor</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a>Sobre WealthWise</a></li>
+          <li><a>Política de privacidad</a></li>
+          <li><a>Aviso legal</a></li>
+          <li><a>Cookies</a></li>
+          <li><a>Publicidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 WealthWise. Todos los derechos reservados.</span>
+      <span>⚠️ Contenido informativo. No constituye asesoramiento financiero.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll to Top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== DATA =====
+const articles = [
+  {
+    id: 0,
+    cat: "Inversión",
+    catColor: "#C9A84C",
+    bgColor: "linear-gradient(135deg, #1A1A2E, #0F3460)",
+    emoji: "📈",
+    large: true,
+    title: "Cómo invertir 10.000€ en 2025 sin cometer los errores del pasado",
+    excerpt: "Una guía paso a paso con las estrategias que los gestores de fondos usan pero pocas veces comparten con el público general.",
+    author: "CM", authorName: "Carlos Mendoza",
+    date: "15 Jun 2025", readTime: "8 min", likes: 342,
+    body: `
+      <p>Invertir 10.000€ puede parecer un desafío colosal si no sabes por dónde empezar. La buena noticia es que existe una hoja de ruta probada que funciona independientemente de si el mercado sube o baja.</p>
+      <h3>1. Primero, el fondo de emergencia</h3>
+      <p>Antes de invertir un solo euro, asegúrate de tener entre 3 y 6 meses de gastos en una cuenta de alta remuneración. En 2025, Trade Republic y MyInvestor ofrecen hasta un 3,5% TAE sin riesgo. Este paso no es opcional.</p>
+      <div class="modal-highlight">"El mejor inversor del mundo no puede generar rentabilidad suficiente para compensar tener que vender en el peor momento." — Howard Marks</div>
+      <h3>2. La regla del 70/20/10</h3>
+      <p>Una vez cubierta la base, la distribución más equilibrada para 10.000€ es: 70% en fondos indexados globales (MSCI World o S&P 500), 20% en renta fija de corto plazo, y 10% en activos satélite como ETFs temáticos o pequeñas posiciones en cripto si tu perfil lo permite.</p>
+      <h3>3. El error más costoso: el market timing</h3>
+      <p>Estudios de Vanguard demuestran que intentar adivinar el mejor momento para entrar al mercado resta un promedio de 1,5% anual de rentabilidad. La solución es simple: DCA (Dollar Cost Averaging), o lo que es lo mismo, invertir una cantidad fija cada mes independientemente del precio.</p>
+      <h3>4. Fondos indexados vs gestión activa</h3>
+      <p>El 80% de los fondos de gestión activa no supera al índice de referencia en periodos de 10 años, según datos de S&P SPIVA. Los costes de gestión (entre 1,5% y 2,5% anuales) se convierten en el mayor ladrón silencioso de tu rentabilidad acumulada.</p>
+    `
+  },
+  {
+    id: 1,
+    cat: "Ahorro",
+    catColor: "#4A6741",
+    bgColor: "linear-gradient(135deg, #1A2E1E, #2D5A27)",
+    emoji: "💰",
+    large: false,
+    title: "El método 50/30/20 adaptado a la inflación española",
+    excerpt: "Cómo distribuir tu sueldo de forma inteligente cuando el coste de vida no para de subir.",
+    author: "SR", authorName: "Sofía Reyes",
+    date: "12 Jun 2025", readTime: "5 min", likes: 218,
+    body: `
+      <p>La regla 50/30/20 fue diseñada en EE.UU. a principios de los 2000. En la España de 2025, con alquileres disparados y una inflación que ha acumulado más del 22% en tres años, esta regla necesita una revisión urgente.</p>
+      <h3>La versión actualizada para España</h3>
+      <p>Con salarios medios de 1.800€ netos y alquileres que consumen entre 700€ y 1.200€ solo en vivienda, la distribución original (50% necesidades, 30% deseos, 20% ahorro) se vuelve imposible para muchos hogares.</p>
+      <div class="modal-highlight">La nueva propuesta: 65% necesidades, 15% deseos, 20% ahorro. Pero con una trampa: el 20% de ahorro debe activarse como pago automático el día de cobro.</div>
+      <h3>El truco psicológico que funciona</h3>
+      <p>El problema no es cuánto ahorrar, sino cuándo. El 94% de las personas que ahorran "lo que sobra al final del mes" acaban ahorrando cero. La solución: domiciliar el ahorro el mismo día que recibes tu nómina. Lo que no ves, no lo gastas.</p>
+    `
+  },
+  {
+    id: 2,
+    cat: "Inmobiliario",
+    catColor: "#8B4513",
+    bgColor: "linear-gradient(135deg, #2E1A0E, #5C3317)",
+    emoji: "🏠",
+    large: false,
+    title: "La burbuja inmobiliaria que nadie quiere nombrar",
+    excerpt: "Los precios del alquiler han superado el 40% del salario medio en 8 ciudades españolas. Los datos son alarmantes.",
+    author: "MP", authorName: "Miguel Paredes",
+    date: "10 Jun 2025", readTime: "6 min", likes: 489,
+    body: `
+      <p>Llamarlo "mercado tensionado" es eufemismo. En Madrid, el precio medio del alquiler ha escalado un 18% en 12 meses. En Barcelona, el 21%. En Valencia, ciudad que hace tres años era refugio para los que huían de las grandes capitales, el incremento ha sido del 34%.</p>
+      <h3>Los números que explican la crisis</h3>
+      <p>Según el índice de esfuerzo inmobiliario de 2025, un hogar con salario medio necesita destinar 7,2 años de sueldo íntegro para comprar una vivienda de 80m² en una capital española. En 2015, ese dato era de 4,8 años.</p>
+      <div class="modal-highlight">El problema no es solo de demanda. España tiene 3,8 millones de viviendas vacías. El problema es de distribución, fiscalidad y especulación institucional.</div>
+      <h3>¿Es momento de comprar o alquilar?</h3>
+      <p>Con hipotecas mixtas al 3,5% y precios de compra en máximos históricos en muchas ciudades, la ecuación matemática favorece el alquiler en zonas prime. Sin embargo, en municipios de segunda corona, la compra puede ser más eficiente a partir de un horizonte de 8-10 años.</p>
+    `
+  },
+  {
+    id: 3,
+    cat: "Impuestos",
+    catColor: "#2C3E50",
+    bgColor: "linear-gradient(135deg, #0D1B2A, #1B2A4A)",
+    emoji: "📊",
+    large: false,
+    title: "Fondos indexados vs ETFs: ¿cuál paga menos impuestos?",
+    excerpt: "La diferencia fiscal entre estos dos productos puede suponer miles de euros en tu declaración de la renta.",
+    author: "LP", authorName: "Laura Pons",
+    date: "8 Jun 2025", readTime: "7 min", likes: 301,
+    body: `
+      <p>Este es uno de los debates más importantes en finanzas personales en España, y curiosamente uno de los menos discutidos. La diferencia no está en la rentabilidad (similar en ambos casos si replican el mismo índice), sino en el tratamiento fiscal.</p>
+      <h3>La ventaja de los fondos de inversión</h3>
+      <p>Los fondos de inversión regulados en España permiten el traspaso entre fondos sin tributación. Puedes mover tu dinero de un fondo a otro —incluso cambiando de estrategia completamente— sin que Hacienda se lleve su parte hasta que no reembolses definitivamente.</p>
+      <div class="modal-highlight">En un ETF, cada venta tributa. En un fondo índice, puedes diferir impuestos indefinidamente mientras hagas traspasos. Con un patrimonio de 100.000€ y un horizonte de 20 años, la diferencia puede superar los 18.000€.</div>
+      <h3>Cuándo los ETFs sí tienen sentido</h3>
+      <p>Para importes pequeños (menos de 5.000€), para estrategias de trading activo, o para acceder a mercados o sectores muy específicos que no tienen equivalente en fondos, los ETFs son la herramienta adecuada.</p>
+    `
+  },
+  {
+    id: 4,
+    cat: "Crypto",
+    catColor: "#6B3FA0",
+    bgColor: "linear-gradient(135deg, #1A0B2E, #2D1B4E)",
+    emoji: "₿",
+    large: false,
+    title: "Bitcoin a 100.000$: los wallets que acumulan en silencio",
+    excerpt: "Análisis on-chain revela patrones de acumulación de grandes inversores mientras el retail vende por el miedo.",
+    author: "AK", authorName: "Alex Kim",
+    date: "6 Jun 2025", readTime: "9 min", likes: 567,
+    body: `
+      <p>Los datos on-chain no mienten. Mientras el precio de Bitcoin fluctuaba entre 58.000$ y 72.000$ durante los últimos tres meses, las wallets con más de 1.000 BTC han aumentado su saldo un 12%. La narración del mercado y el comportamiento real de los grandes inversores apuntan en dirección opuesta.</p>
+      <h3>El patrón se repite</h3>
+      <p>En noviembre de 2020, antes del rally que llevó a Bitcoin de 10.000$ a 64.000$, se observó exactamente el mismo patrón: acumulación silenciosa de ballenas mientras el minorista vendía "para no perder más". El coste medio de entrada para esas wallets fue de 11.200$.</p>
+      <div class="modal-highlight">La métrica SOPR (Spent Output Profit Ratio) está actualmente en zona de capitulación minorista por tercera vez desde 2021. Históricamente, estas zonas han precedido a movimientos alcistas de entre 6 y 18 meses.</div>
+      <h3>Los riesgos que nadie menciona</h3>
+      <p>La correlación creciente con los mercados de renta variable, la regulación pendiente en la UE (MiCA 2.0) y la concentración de minería en tres países representan riesgos sistémicos que cualquier inversor debe calibrar antes de entrar.</p>
+    `
+  },
+  {
+    id: 5,
+    cat: "Pensiones",
+    catColor: "#2E4057",
+    bgColor: "linear-gradient(135deg, #0D1B2A, #162340)",
+    emoji: "🎯",
+    large: false,
+    title: "FIRE en España: jubilarse a los 45 sí es posible (con estos números)",
+    excerpt: "La guía completa del movimiento FIRE adaptada a la fiscalidad y el mercado laboral español.",
+    author: "RG", authorName: "Raquel Gil",
+    date: "4 Jun 2025", readTime: "11 min", likes: 423,
+    body: `
+      <p>FIRE (Financial Independence, Retire Early) ha dejado de ser un movimiento exclusivamente anglosajón. En España, la comunidad crece a un ritmo del 40% anual, y los foros especializados ya superan los 200.000 seguidores activos. Pero hay particularidades fiscales y culturales que hacen que la estrategia estándar no funcione aquí sin adaptaciones.</p>
+      <h3>La regla del 4% en contexto español</h3>
+      <p>La famosa regla del 4% (retirar anualmente el 4% de tu patrimonio invertido) fue estudiada sobre mercados americanos de los últimos 50 años. Aplicada al contexto europeo, varios estudios sugieren que una tasa del 3% a 3,5% es más prudente para períodos de 40+ años.</p>
+      <div class="modal-highlight">Para retirarte con 40 años en España con un gasto mensual de 2.000€ (24.000€/año), necesitas un patrimonio mínimo de entre 685.000€ y 800.000€ según el modelo europeo.</div>
+      <h3>El problema de la Seguridad Social</h3>
+      <p>Retirarse antes de los 65 implica dejar de cotizar. Eso impacta directamente en tu pensión futura. La solución que usan muchos FIRErs españoles: mantener una pequeña actividad como autónomo (incluso a 0€ de facturación en algunos casos) para preservar los derechos de cotización mínimos.</p>
+    `
+  }
+];
+
+let likeStates = {};
+let currentFilter = 'Todos';
+
+// ===== RENDER ARTICLES =====
+function renderArticles(filter) {
+  const grid = document.getElementById('articlesGrid');
+  const filtered = filter === 'Todos' ? articles : articles.filter(a => a.cat === filter);
+  grid.innerHTML = '';
+  filtered.forEach((a, i) => {
+    const liked = likeStates[a.id] || false;
+    const card = document.createElement('div');
+    card.className = `article-card${a.large ? ' large' : ''}`;
+    card.style.animationDelay = `${i * 0.08}s`;
+    card.innerHTML = `
+      <div class="article-thumb" style="background:${a.bgColor}">
+        <span class="thumb-icon">${a.emoji}</span>
+      </div>
+      <div class="article-body">
+        <div class="article-cat" style="color:${a.catColor}">${a.cat}</div>
+        <h3>${a.title}</h3>
+        <p>${a.excerpt}</p>
+      </div>
+      <div class="article-footer">
+        <div class="author-mini">
+          <div class="author-avatar">${a.author}</div>
+          <span>${a.authorName} · ${a.readTime}</span>
+        </div>
+        <button class="likes-btn ${liked ? 'liked' : ''}" onclick="toggleLike(event, ${a.id})">
+          ${liked ? '❤️' : '🤍'} <span id="likes-${a.id}">${a.likes + (liked ? 1 : 0)}</span>
+        </button>
+      </div>
+    `;
+    card.querySelector('.article-body').addEventListener('click', () => openArticle(a.id));
+    card.querySelector('.article-thumb').addEventListener('click', () => openArticle(a.id));
+    grid.appendChild(card);
+  });
+}
+
+function filterArticles(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === cat || (cat === 'Todos' && btn.textContent === 'Todos'));
+  });
+  // scroll to articles
+  document.getElementById('articles').scrollIntoView({behavior:'smooth'});
+  renderArticles(cat);
+}
+
+function toggleLike(e, id) {
+  e.stopPropagation();
+  const btn = e.currentTarget;
+  likeStates[id] = !likeStates[id];
+  const article = articles.find(a => a.id === id);
+  const count = article.likes + (likeStates[id] ? 1 : 0);
+  btn.classList.toggle('liked', likeStates[id]);
+  btn.innerHTML = `${likeStates[id] ? '❤️' : '🤍'} <span id="likes-${id}">${count}</span>`;
+  btn.style.transform = 'scale(1.3)';
+  setTimeout(() => btn.style.transform = '', 200);
+}
+
+// ===== MODAL =====
+function openArticle(id) {
+  const article = articles.find(a => a.id === id);
+  if (!article) return;
+  document.getElementById('modalCat').textContent = article.cat;
+  document.getElementById('modalCat').style.color = article.catColor;
+  document.getElementById('modalTitle').textContent = article.title;
+  document.getElementById('modalBody').innerHTML = article.body;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+// ===== CALCULATOR =====
+function updateRate() {
+  const v = document.getElementById('calcRate').value;
+  document.getElementById('rateLabel').textContent = v + '%';
+  calcResult();
+}
+function calcResult() {
+  const capital = parseFloat(document.getElementById('calcCapital').value) || 0;
+  const monthly = parseFloat(document.getElementById('calcMonthly').value) || 0;
+  const rate = parseFloat(document.getElementById('calcRate').value) / 100;
+  const years = parseInt(document.getElementById('calcYears').value);
+  const months = years * 12;
+  const monthlyRate = rate / 12;
+  let total = capital * Math.pow(1 + monthlyRate, months);
+  if (monthlyRate > 0) {
+    total += monthly * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+  } else {
+    total += monthly * months;
+  }
+  const invested = capital + monthly * months;
+  const gains = total - invested;
+  const resultEl = document.getElementById('calcResult');
+  document.getElementById('resultMain').textContent = '€ ' + Math.round(total).toLocaleString('es-ES');
+  document.getElementById('resultSub').innerHTML = `
+    Invertido: <strong style="color:#888">€ ${Math.round(invested).toLocaleString('es-ES')}</strong> &nbsp;·&nbsp;
+    Ganancias: <strong style="color:#4CAF50">€ ${Math.round(gains).toLocaleString('es-ES')}</strong> &nbsp;·&nbsp;
+    Rendimiento: <strong style="color:var(--gold)">${((gains/invested)*100).toFixed(1)}%</strong>
+  `;
+  resultEl.classList.add('show');
+}
+
+// ===== NEWSLETTER =====
+function submitForm() {
+  const name = document.getElementById('newsletterName').value;
+  const email = document.getElementById('newsletterEmail').value;
+  if (!email || !email.includes('@')) {
+    document.getElementById('newsletterEmail').style.borderColor = '#C0392B';
+    return;
+  }
+  document.getElementById('formSubmit').classList.add('submitted');
+  setTimeout(() => {
+    document.getElementById('newsletterName').value = '';
+    document.getElementById('newsletterEmail').value = '';
+  }, 800);
+}
+
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+document.querySelectorAll('a, button, .article-card, .trending-item, .featured-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hovering'); ring.classList.add('hovering'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hovering'); ring.classList.remove('hovering'); });
+});
+
+// ===== READING PROGRESS =====
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('readingProgress').style.width = pct + '%';
+  document.getElementById('scrollTop').classList.toggle('visible', el.scrollTop > 400);
+});
+
+// ===== HERO CHART =====
+function buildHeroChart() {
+  const chart = document.getElementById('heroChart');
+  const vals = [40, 55, 45, 62, 58, 70, 65, 78, 72, 85, 80, 95, 88, 100];
+  chart.innerHTML = vals.map((v, i) => `<div class="chart-bar ${i === vals.length-1 ? 'active' : ''}" style="height:${v}%"></div>`).join('');
+  setTimeout(() => document.getElementById('heroProgressBar').style.width = '65%', 800);
+}
+
+// ===== COUNTER ANIMATION =====
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const duration = 1800;
+    const start = performance.now();
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = Math.round(eased * target);
+      el.textContent = val >= 1000 ? (val / 1000).toFixed(0) + 'K+' : val;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+// ===== REVEAL ON SCROLL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== COUNTER OBSERVER =====
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounters(); counterObs.disconnect(); } });
+}, { threshold: 0.5 });
+const statsEl = document.querySelector('.hero-stats');
+if (statsEl) counterObs.observe(statsEl);
+
+// ===== INIT =====
+renderArticles('Todos');
+buildHeroChart();
+calcResult();
+</script>
+</body>
+</html>
